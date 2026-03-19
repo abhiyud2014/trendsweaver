@@ -777,14 +777,14 @@ function ProcessStep({ icon, title, subtitle, description, active, completed }: 
           {React.cloneElement(icon as React.ReactElement, { className: "w-8 h-8" })}
         </div>
         <div className="space-y-1">
-          <h3 className={`font-display font-bold text-lg transition-colors ${active ? 'text-brand-blue dark:text-white' : 'text-brand-blue/40 dark:text-white/30'}`}>
+          <h3 className="font-display font-bold text-lg text-[#0A2540] dark:text-white">
             {title}
           </h3>
-          <p className={`text-[10px] font-mono uppercase tracking-widest font-bold ${active ? 'text-brand-accent' : 'text-brand-blue/20 dark:text-white/20'}`}>
+          <p className={`text-[10px] font-mono uppercase tracking-widest font-bold ${active ? 'text-brand-accent' : 'text-[#0A2540]/40 dark:text-white/40'}`}>
             {subtitle}
           </p>
         </div>
-        <p className={`text-xs leading-relaxed transition-opacity dark:text-white/60 ${active ? 'opacity-100' : 'opacity-40'}`}>
+        <p className="text-xs leading-relaxed text-[#0A2540] dark:text-white">
           {description}
         </p>
       </div>
