@@ -280,11 +280,7 @@ ${currentInsight.relatedSignals.join(', ')}
       {/* Header */}
       <header className="sticky top-0 z-50 bg-brand-blue dark:bg-[#161b22] text-white py-6 px-8 flex items-center justify-between border-b border-white/10">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center overflow-hidden">
-            <div className="w-8 h-8 bg-brand-blue rounded-full flex items-center justify-center">
-              <div className="w-4 h-4 bg-white rounded-sm rotate-45" />
-            </div>
-          </div>
+          <img src="/trendweaverLogo.gif" alt="TrendWeaver Logo" className="w-12 h-12 rounded-lg object-contain" />
           <div>
             <h1 className="text-2xl font-display font-bold tracking-tight">TRENDWEAVER</h1>
             <p className="text-xs text-white/60 font-mono uppercase tracking-widest">foresight in motion</p>
