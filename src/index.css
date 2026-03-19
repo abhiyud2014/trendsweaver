@@ -1,0 +1,183 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-brand-blue: #0A2540;
+  --color-brand-accent: #EA4335;
+  --color-brand-light: #EEF2F7;
+
+  /* Light theme surface colors */
+  --color-surface: #ffffff;
+  --color-surface-2: #EEF2F7;
+  --color-surface-3: #E2E8F2;
+  --color-text-primary: #0A2540;
+  --color-text-secondary: #3D5A80;
+  --color-text-muted: #6B8CAE;
+  --color-border: rgba(10,37,64,0.12);
+}
+
+/* ── Light theme base ── */
+@layer base {
+  html { @apply transition-colors duration-300; }
+
+  body {
+    background: linear-gradient(135deg, #EEF2F7 0%, #E2EAF4 50%, #F0E8F5 100%);
+    @apply text-[#0A2540] font-sans antialiased min-h-screen;
+  }
+
+  /* ── Dark theme: swap brand-blue to white so all text-brand-blue becomes white ── */
+  .dark body {
+    background: linear-gradient(135deg, #0a0e1a 0%, #0d1525 50%, #120a1e 100%);
+    --color-brand-blue: #ffffff;
+    --color-brand-light: #1a2035;
+    color: #ffffff;
+  }
+}
+
+/* ── Gradient accent blobs (light) ── */
+body::before {
+  content: '';
+  position: fixed;
+  top: -20%;
+  right: -10%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+body::after {
+  content: '';
+  position: fixed;
+  bottom: -20%;
+  left: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(234,67,53,0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Dark gradient blobs ── */
+.dark body::before {
+  background: radial-gradient(circle, rgba(99,102,241,0.18) 0%, transparent 70%);
+}
+.dark body::after {
+  background: radial-gradient(circle, rgba(234,67,53,0.12) 0%, transparent 70%);
+}
+
+/* ── Card surfaces ── */
+.card {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(10,37,64,0.1);
+  box-shadow: 0 4px 24px rgba(10,37,64,0.08), 0 1px 4px rgba(10,37,64,0.04);
+}
+.dark .card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4), 0 1px 4px rgba(0,0,0,0.2);
+}
+
+/* ── Header gradient ── */
+.header-gradient {
+  background: linear-gradient(135deg, #0A2540 0%, #1a3a5c 60%, #2d1b4e 100%);
+}
+.dark .header-gradient {
+  background: linear-gradient(135deg, #060d1a 0%, #0d1a2e 60%, #130d22 100%);
+}
+
+/* ── Hero gradient text ── */
+.gradient-text {
+  background: linear-gradient(135deg, #0A2540 0%, #3D5A80 50%, #6366f1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.dark .gradient-text {
+  background: linear-gradient(135deg, #818cf8 0%, #a78bfa 50%, #e879f9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Search bar ── */
+.search-input {
+  background: rgba(255,255,255,0.9);
+  border: 2px solid rgba(10,37,64,0.1);
+  color: #0A2540;
+  backdrop-filter: blur(8px);
+}
+.search-input::placeholder { color: rgba(10,37,64,0.35); }
+.search-input:focus { border-color: #EA4335; outline: none; }
+
+.dark .search-input {
+  background: rgba(255,255,255,0.06);
+  border: 2px solid rgba(255,255,255,0.12);
+  color: #E8EDF5;
+}
+.dark .search-input::placeholder { color: rgba(232,237,245,0.35); }
+.dark .search-input:focus { border-color: #EA4335; }
+
+/* ── Score bar gradient ── */
+.score-bar-fill {
+  background: linear-gradient(90deg, #3D5A80, #6366f1);
+}
+.dark .score-bar-fill {
+  background: linear-gradient(90deg, #818cf8, #e879f9);
+}
+
+/* ── Key insight card ── */
+.insight-card {
+  background: linear-gradient(135deg, #0A2540 0%, #1a3a5c 100%);
+}
+.dark .insight-card {
+  background: linear-gradient(135deg, #1e1040 0%, #2d1b4e 100%);
+}
+
+/* ── Landscape summary card ── */
+.summary-card {
+  background: linear-gradient(135deg, rgba(99,102,241,0.08) 0%, rgba(10,37,64,0.05) 100%);
+  border: 1px solid rgba(99,102,241,0.15);
+}
+.dark .summary-card {
+  background: linear-gradient(135deg, rgba(99,102,241,0.12) 0%, rgba(167,139,250,0.06) 100%);
+  border: 1px solid rgba(99,102,241,0.25);
+}
+
+/* ── Process step active ── */
+.step-active {
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 8px 32px rgba(10,37,64,0.12), 0 0 0 2px rgba(234,67,53,0.2);
+}
+.dark .step-active {
+  background: rgba(255,255,255,0.06);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 2px rgba(234,67,53,0.3);
+}
+
+/* ── Trend list item selected ── */
+.trend-selected {
+  background: linear-gradient(135deg, #0A2540 0%, #1a3a5c 100%);
+  border-color: transparent;
+}
+.dark .trend-selected {
+  background: linear-gradient(135deg, #1e1040 0%, #2d1b4e 100%);
+  border-color: rgba(129,140,248,0.3);
+}
+
+/* ── Footer ── */
+.footer-bg {
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(10,37,64,0.08);
+}
+.dark .footer-bg {
+  background: rgba(255,255,255,0.03);
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
