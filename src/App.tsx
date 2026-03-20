@@ -168,102 +168,132 @@ ${currentInsight.relatedSignals.join(', ')}
         setLoadingTrendId(null);
       }
 
+      // 16:9 canvas = 10" x 5.625" — all positions must stay within these bounds
+      const SW = 10, SH = 5.625;
       const pres = new pptxgen();
       pres.layout = 'LAYOUT_16x9';
 
-      // 1. Title Slide
+      const addHeader = (slide: any, title: string, sub?: string) => {
+        slide.addShape(pres.ShapeType.rect, { x: 0, y: 0, w: SW, h: 0.65, fill: { color: '0A192F' } });
+        slide.addText(title, { x: 0.35, y: 0, w: SW - 0.7, h: 0.65, fontSize: 16, color: 'FFFFFF', bold: true, valign: 'middle', fontFace: 'Arial' });
+        if (sub) slide.addText(sub, { x: 0.35, y: 0.67, w: SW - 0.7, h: 0.22, fontSize: 9, color: 'FF6321', bold: true, fontFace: 'Arial' });
+      };
+
+      // ── 1. Title Slide ──
       const titleSlide = pres.addSlide();
       titleSlide.background = { color: '0A192F' };
-      titleSlide.addText("TRENDWEAVER", { x: 0.5, y: 3.0, fontSize: 54, color: 'FFFFFF', bold: true, fontFace: 'Arial' });
-      titleSlide.addText("Foresight in Motion", { x: 0.5, y: 3.8, fontSize: 28, color: 'FF6321', fontFace: 'Arial' });
-      titleSlide.addShape(pres.ShapeType.line, { x: 0.5, y: 4.5, w: 9, h: 0, line: { color: 'FF6321', width: 2 } });
-      titleSlide.addText(`Topic: ${topic.toUpperCase()}`, { x: 0.5, y: 4.8, fontSize: 20, color: 'FFFFFF', fontFace: 'Arial' });
-      titleSlide.addText(`Date: March 2026`, { x: 0.5, y: 5.3, fontSize: 14, color: 'FFFFFF', fontFace: 'Arial' });
-      titleSlide.addText("By: BRANDSCAPES WORLDWIDE", { x: 0.5, y: 6.2, fontSize: 16, color: 'FF6321', bold: true, fontFace: 'Arial' });
+      titleSlide.addShape(pres.ShapeType.rect, { x: 0, y: 0, w: 0.1, h: SH, fill: { color: 'FF6321' } });
+      titleSlide.addText('TRENDWEAVER', { x: 0.35, y: 1.3, w: SW - 0.7, h: 0.9, fontSize: 44, color: 'FFFFFF', bold: true, fontFace: 'Arial' });
+      titleSlide.addText('Foresight in Motion', { x: 0.35, y: 2.25, w: SW - 0.7, h: 0.4, fontSize: 20, color: 'FF6321', fontFace: 'Arial' });
+      titleSlide.addShape(pres.ShapeType.line, { x: 0.35, y: 2.75, w: 3.5, h: 0, line: { color: 'FF6321', width: 1.5 } });
+      titleSlide.addText(`Topic: ${topic.toUpperCase()}`, { x: 0.35, y: 2.9, w: SW - 0.7, h: 0.35, fontSize: 15, color: 'FFFFFF', fontFace: 'Arial' });
+      titleSlide.addText('March 2026  |  By: BRANDSCAPES WORLDWIDE', { x: 0.35, y: 3.3, w: SW - 0.7, h: 0.28, fontSize: 10, color: '888888', fontFace: 'Arial' });
 
-      // 2. Methodology Slide
+      // ── 2. Methodology Slide ──
       const methodSlide = pres.addSlide();
-      methodSlide.addText("METHODOLOGY: THE 3R CHECK", { x: 0.5, y: 0.5, fontSize: 24, color: '0A192F', bold: true });
-      methodSlide.addShape(pres.ShapeType.line, { x: 0.5, y: 1.0, w: 9, h: 0, line: { color: 'FF6321', width: 1 } });
-      
-      methodSlide.addText("RELIABLE: Credible sources of truth\nRECENT: Freshness is given precedence (last 6 months)\nRECURRING: To filter out fads by identifying patterns", { x: 0.5, y: 1.5, w: 9, fontSize: 16, color: '333333', lineSpacing: 24 });
-      
-      methodSlide.addText("DIMENSIONS SCANNED", { x: 0.5, y: 3.5, fontSize: 20, color: 'FF6321', bold: true });
-      methodSlide.addText("MACRO: Economic, Tech, Politics, Legal, Environment\nCULTURE: Religion, Art, Language, Customs, Social Structure\nPERSONAL: Needs, Concerns, Fears, Desires, Ambitions", { x: 0.5, y: 4.2, w: 9, fontSize: 14, color: '333333', lineSpacing: 20 });
+      methodSlide.background = { color: 'FFFFFF' };
+      addHeader(methodSlide, 'METHODOLOGY: THE 3R CHECK');
+      const methodRows: [string, string][] = [
+        ['RELIABLE', 'Credible, verifiable sources of truth'],
+        ['RECENT', 'Freshness is given precedence — last 6 months'],
+        ['RECURRING', 'Filters out fads by identifying repeating patterns'],
+      ];
+      methodRows.forEach(([label, text], i) => {
+        const ry = 1.05 + i * 0.65;
+        methodSlide.addShape(pres.ShapeType.rect, { x: 0.35, y: ry, w: 1.3, h: 0.45, fill: { color: '0A192F' } });
+        methodSlide.addText(label, { x: 0.35, y: ry, w: 1.3, h: 0.45, fontSize: 10, color: 'FFFFFF', bold: true, align: 'center', valign: 'middle', fontFace: 'Arial' });
+        methodSlide.addText(text, { x: 1.8, y: ry + 0.05, w: 7.85, h: 0.35, fontSize: 11, color: '333333', valign: 'middle', fontFace: 'Arial' });
+      });
+      methodSlide.addShape(pres.ShapeType.line, { x: 0.35, y: 3.1, w: SW - 0.7, h: 0, line: { color: 'DDDDDD', width: 0.75 } });
+      methodSlide.addText('DIMENSIONS SCANNED', { x: 0.35, y: 3.22, w: SW - 0.7, h: 0.28, fontSize: 11, color: 'FF6321', bold: true, fontFace: 'Arial' });
+      methodSlide.addText('MACRO: Economic, Tech, Politics, Legal, Environment   |   CULTURE: Religion, Art, Language, Customs   |   PERSONAL: Needs, Fears, Desires, Ambitions', { x: 0.35, y: 3.55, w: SW - 0.7, h: 0.55, fontSize: 9, color: '555555', lineSpacing: 15, fontFace: 'Arial' });
 
-      // 3. Landscape Summary Slide
+      // ── 3. Landscape Summary Slide ──
       const landscapeSlide = pres.addSlide();
-      landscapeSlide.addText("LANDSCAPE SUMMARY", { x: 0.5, y: 0.5, fontSize: 24, color: '0A192F', bold: true });
-      landscapeSlide.addShape(pres.ShapeType.line, { x: 0.5, y: 1.0, w: 9, h: 0, line: { color: 'FF6321', width: 1 } });
-      landscapeSlide.addShape(pres.ShapeType.rect, { x: 0.5, y: 1.5, w: 9, h: 4, fill: { color: 'F0F4F8' }, line: { color: '0A192F', width: 1 } });
-      landscapeSlide.addText(landscapeSummary, { x: 0.8, y: 1.8, w: 8.4, h: 3.4, fontSize: 20, color: '0A192F', italic: true, align: 'center', valign: 'middle' });
+      landscapeSlide.background = { color: 'FFFFFF' };
+      addHeader(landscapeSlide, 'LANDSCAPE SUMMARY', `Topic: ${topic}`);
+      landscapeSlide.addShape(pres.ShapeType.rect, { x: 0.35, y: 1.0, w: SW - 0.7, h: 4.3, fill: { color: 'F0F4F8' }, line: { color: 'CCCCCC', width: 0.5 } });
+      landscapeSlide.addText(`"${landscapeSummary}"`, { x: 0.6, y: 1.0, w: SW - 1.2, h: 4.3, fontSize: 15, color: '0A192F', italic: true, align: 'center', valign: 'middle', lineSpacing: 24, fontFace: 'Arial' });
 
-      // 4. Trend Matrix Slide
+      // ── 4. Trend Matrix Slide ──
       const matrixSlide = pres.addSlide();
-      matrixSlide.addText("TREND PRIORITIZATION MATRIX", { x: 0.5, y: 0.5, fontSize: 24, color: '0A192F', bold: true });
-      matrixSlide.addShape(pres.ShapeType.line, { x: 0.5, y: 1.0, w: 9, h: 0, line: { color: 'FF6321', width: 1 } });
-      
-      // Draw Matrix
-      const boxW = 4.2;
-      const boxH = 2.2;
-      const startX = 0.8;
-      const startY = 1.5;
+      matrixSlide.background = { color: 'FFFFFF' };
+      addHeader(matrixSlide, 'TREND PRIORITIZATION MATRIX');
+      const bW = 4.55, bH = 2.1, mX = 0.35, mY = 1.0;
+      const quadrants: { label: string; color: string; tx: number; ty: number }[] = [
+        { label: 'BUZZ', color: 'FF6321', tx: mX, ty: mY },
+        { label: 'EMERGENT', color: '2ECC71', tx: mX + bW + 0.1, ty: mY },
+        { label: 'MAINSTREAM', color: '3498DB', tx: mX, ty: mY + bH + 0.1 },
+        { label: 'NICHE', color: 'F1C40F', tx: mX + bW + 0.1, ty: mY + bH + 0.1 },
+      ];
+      quadrants.forEach(({ label, color, tx, ty }) => {
+        matrixSlide.addShape(pres.ShapeType.rect, { x: tx, y: ty, w: bW, h: bH, fill: { color, transparency: 85 }, line: { color, width: 1 } });
+        matrixSlide.addText(label, { x: tx, y: ty, w: bW, h: bH, fontSize: 20, color, bold: true, align: 'center', valign: 'middle', fontFace: 'Arial' });
+      });
 
-      matrixSlide.addShape(pres.ShapeType.rect, { x: startX, y: startY, w: boxW, h: boxH, fill: { color: 'FF6321', transparency: 80 } });
-      matrixSlide.addText("BUZZ", { x: startX, y: startY, w: boxW, h: boxH, align: 'center', fontSize: 24, color: 'FF6321', bold: true });
+      // ── 5. Per-trend: dynamic slides ──
+      const truncate = (text: string, maxLen: number) => text.length > maxLen ? text.substring(0, maxLen - 3) + '...' : text;
       
-      matrixSlide.addShape(pres.ShapeType.rect, { x: startX + boxW + 0.2, y: startY, w: boxW, h: boxH, fill: { color: '00FF00', transparency: 80 } });
-      matrixSlide.addText("EMERGENT", { x: startX + boxW + 0.2, y: startY, w: boxW, h: boxH, align: 'center', fontSize: 24, color: '00FF00', bold: true });
-      
-      matrixSlide.addShape(pres.ShapeType.rect, { x: startX, y: startY + boxH + 0.2, w: boxW, h: boxH, fill: { color: '8B4513', transparency: 80 } });
-      matrixSlide.addText("MAINSTREAM", { x: startX, y: startY + boxH + 0.2, w: boxW, h: boxH, align: 'center', fontSize: 24, color: '8B4513', bold: true });
-      
-      matrixSlide.addShape(pres.ShapeType.rect, { x: startX + boxW + 0.2, y: startY + boxH + 0.2, w: boxW, h: boxH, fill: { color: 'FFD700', transparency: 80 } });
-      matrixSlide.addText("NICHE", { x: startX + boxW + 0.2, y: startY + boxH + 0.2, w: boxW, h: boxH, align: 'center', fontSize: 24, color: 'FFD700', bold: true });
-
-      // 5. Individual Trend Slides
-      for (const trend of trends) {
+      for (let idx = 0; idx < trends.length; idx++) {
+        const trend = trends[idx];
         const insight = newInsights[trend.id];
         if (!insight) continue;
+        const chapterLabel = `TREND ${idx + 1} OF ${trends.length}  ·  ${insight.quadrant.toUpperCase()}  ·  SCORE: ${insight.score}/100`;
 
-        const slide = pres.addSlide();
-        
-        // Header
-        slide.addShape(pres.ShapeType.rect, { x: 0, y: 0, w: '100%', h: 1.2, fill: { color: '0A192F' } });
-        slide.addText(insight.title.toUpperCase(), { x: 0.5, y: 0.3, w: 7, fontSize: 28, color: 'FFFFFF', bold: true });
-        slide.addText(`${insight.quadrant} Trend | Score: ${insight.score}`, { x: 0.5, y: 0.8, fontSize: 14, color: 'FF6321', bold: true });
-
-        // Key Insight
-        slide.addText("KEY INSIGHT", { x: 0.5, y: 1.5, fontSize: 14, color: '0A192F', bold: true });
-        slide.addShape(pres.ShapeType.rect, { x: 0.5, y: 1.8, w: 9, h: 0.8, fill: { color: 'F0F4F8' }, line: { color: '0A192F', width: 1 } });
-        slide.addText(insight.keyInsight, { x: 0.7, y: 1.8, w: 8.6, h: 0.8, fontSize: 16, color: '0A192F', italic: true, valign: 'middle' });
-
+        // Slide A: dark — title + key insight + implication
+        const slideA = pres.addSlide();
+        slideA.background = { color: '0A192F' };
+        slideA.addShape(pres.ShapeType.rect, { x: 0, y: 0, w: 0.1, h: SH, fill: { color: 'FF6321' } });
+        slideA.addText(chapterLabel, { x: 0.35, y: 0.2, w: SW - 0.7, h: 0.25, fontSize: 8, color: 'FF6321', bold: true, fontFace: 'Arial' });
+        slideA.addText(truncate(insight.title, 80), { x: 0.35, y: 0.5, w: SW - 0.7, h: 0.8, fontSize: 22, color: 'FFFFFF', bold: true, lineSpacing: 28, fontFace: 'Arial' });
+        slideA.addShape(pres.ShapeType.line, { x: 0.35, y: 1.4, w: SW - 0.7, h: 0, line: { color: 'FF6321', width: 0.75 } });
+        // Key Insight box
+        slideA.addShape(pres.ShapeType.rect, { x: 0.35, y: 1.5, w: SW - 0.7, h: 1.1, fill: { color: '112244' }, line: { color: 'FF6321', width: 0.5 } });
+        slideA.addText('KEY INSIGHT', { x: 0.45, y: 1.54, w: 2, h: 0.2, fontSize: 7, color: 'FF6321', bold: true, fontFace: 'Arial' });
+        slideA.addText(truncate(insight.keyInsight, 280), { x: 0.45, y: 1.76, w: SW - 0.9, h: 0.75, fontSize: 11, color: 'FFFFFF', italic: true, lineSpacing: 16, fontFace: 'Arial' });
         // Implication
-        slide.addText("IMPLICATION", { x: 0.5, y: 2.8, fontSize: 14, color: 'FF6321', bold: true });
-        slide.addText(insight.implication, { x: 0.5, y: 3.1, w: 9, fontSize: 12, color: '333333' });
+        slideA.addText('IMPLICATION', { x: 0.35, y: 2.7, w: SW - 0.7, h: 0.22, fontSize: 8, color: 'FF6321', bold: true, fontFace: 'Arial' });
+        slideA.addText(truncate(insight.implication, 600), { x: 0.35, y: 2.95, w: SW - 0.7, h: 2.4, fontSize: 10, color: 'BBBBBB', lineSpacing: 15, fontFace: 'Arial' });
 
-        // Narrative
-        slide.addText("THE NARRATIVE", { x: 0.5, y: 4.0, fontSize: 14, color: '0A192F', bold: true });
-        slide.addText(insight.narrative, { x: 0.5, y: 4.3, w: 9, h: 2.5, fontSize: 11, color: '666666', lineSpacing: 18 });
-
-        // Context Boxes
-        slide.addShape(pres.ShapeType.rect, { x: 0.5, y: 7.0, w: 4.4, h: 1.2, fill: { color: '0A192F', transparency: 95 } });
-        slide.addText("CATEGORY CONTEXT", { x: 0.6, y: 7.1, fontSize: 10, color: '0A192F', bold: true });
-        slide.addText(insight.categoryContext, { x: 0.6, y: 7.3, w: 4.2, fontSize: 9, color: '333333' });
-
-        slide.addShape(pres.ShapeType.rect, { x: 5.1, y: 7.0, w: 4.4, h: 1.2, fill: { color: 'FF6321', transparency: 95 } });
-        slide.addText("MACRO CONTEXT", { x: 5.2, y: 7.1, fontSize: 10, color: 'FFFFFF', bold: true });
-        slide.addText(insight.macroContext, { x: 5.2, y: 7.3, w: 4.2, fontSize: 9, color: 'FFFFFF' });
-
+        // Slide B: white — narrative + context + examples
+        const slideB = pres.addSlide();
+        slideB.background = { color: 'FFFFFF' };
+        addHeader(slideB, truncate(insight.title, 60), `${insight.quadrant} Trend  ·  Score: ${insight.score}/100`);
+        // Left: narrative
+        slideB.addText('THE NARRATIVE', { x: 0.35, y: 0.95, w: 5.5, h: 0.22, fontSize: 8, color: '0A192F', bold: true, fontFace: 'Arial' });
+        slideB.addText(truncate(insight.narrative, 800), { x: 0.35, y: 1.2, w: 5.5, h: 1.6, fontSize: 9, color: '444444', lineSpacing: 14, fontFace: 'Arial' });
+        // Left: examples (max 2)
+        slideB.addText('EXAMPLES', { x: 0.35, y: 2.9, w: 5.5, h: 0.22, fontSize: 8, color: '0A192F', bold: true, fontFace: 'Arial' });
+        const ex1 = truncate(insight.examples[0] || '', 200);
+        const ex2 = truncate(insight.examples[1] || '', 200);
+        slideB.addText(`1.  ${ex1}`, { x: 0.35, y: 3.15, w: 5.5, h: 0.7, fontSize: 8, color: '555555', lineSpacing: 13, fontFace: 'Arial' });
+        if (ex2) slideB.addText(`2.  ${ex2}`, { x: 0.35, y: 3.9, w: 5.5, h: 0.7, fontSize: 8, color: '555555', lineSpacing: 13, fontFace: 'Arial' });
+        // Divider
+        slideB.addShape(pres.ShapeType.line, { x: 6.0, y: 0.9, w: 0, h: 4.5, line: { color: 'DDDDDD', width: 0.75 } });
+        // Right: category context
+        slideB.addShape(pres.ShapeType.rect, { x: 6.15, y: 0.95, w: 3.5, h: 0.25, fill: { color: '0A192F' } });
+        slideB.addText('CATEGORY CONTEXT', { x: 6.15, y: 0.95, w: 3.5, h: 0.25, fontSize: 7, color: 'FFFFFF', bold: true, align: 'center', valign: 'middle', fontFace: 'Arial' });
+        slideB.addText(truncate(insight.categoryContext, 400), { x: 6.15, y: 1.23, w: 3.5, h: 1.2, fontSize: 8, color: '333333', lineSpacing: 13, fontFace: 'Arial' });
+        // Right: macro context
+        slideB.addShape(pres.ShapeType.rect, { x: 6.15, y: 2.55, w: 3.5, h: 0.25, fill: { color: 'FF6321' } });
+        slideB.addText('MACRO CONTEXT', { x: 6.15, y: 2.55, w: 3.5, h: 0.25, fontSize: 7, color: 'FFFFFF', bold: true, align: 'center', valign: 'middle', fontFace: 'Arial' });
+        slideB.addText(truncate(insight.macroContext, 400), { x: 6.15, y: 2.83, w: 3.5, h: 1.2, fontSize: 8, color: '333333', lineSpacing: 13, fontFace: 'Arial' });
+        // Right: score breakdown
+        slideB.addText('SCORE BREAKDOWN', { x: 6.15, y: 4.15, w: 3.5, h: 0.2, fontSize: 7, color: '0A192F', bold: true, fontFace: 'Arial' });
+        const scores = `Ubiquity: ${insight.scoreBreakdown.ubiquity}%  |  Impact: ${insight.scoreBreakdown.impact}%  |  Relevance: ${insight.scoreBreakdown.relevance}%`;
+        slideB.addText(scores, { x: 6.15, y: 4.38, w: 3.5, h: 0.3, fontSize: 7, color: '666666', fontFace: 'Arial' });
         // Footer
-        slide.addText(`Source: ${insight.sourceCitation}`, { x: 0.5, y: 8.3, fontSize: 8, color: '999999', italic: true });
+        slideB.addShape(pres.ShapeType.line, { x: 0.35, y: 5.2, w: SW - 0.7, h: 0, line: { color: 'EEEEEE', width: 0.5 } });
+        const src = truncate(insight.sourceCitation || insight.sourceUrl || '', 150);
+        slideB.addText(`Source: ${src}`, { x: 0.35, y: 5.25, w: SW - 0.7, h: 0.3, fontSize: 6, color: '999999', italic: true, fontFace: 'Arial' });
       }
 
-      // 6. Examples Slide (Summary of examples if needed, or just end)
+      // ── End Slide ──
       const endSlide = pres.addSlide();
       endSlide.background = { color: '0A192F' };
-      endSlide.addText("THANK YOU", { x: 0, y: 3.0, w: '100%', align: 'center', fontSize: 48, color: 'FFFFFF', bold: true });
-      endSlide.addText("Strategic Foresight by Brandscapes Worldwide", { x: 0, y: 4.0, w: '100%', align: 'center', fontSize: 18, color: 'FF6321' });
+      endSlide.addShape(pres.ShapeType.rect, { x: 0, y: 0, w: 0.1, h: SH, fill: { color: 'FF6321' } });
+      endSlide.addText('THANK YOU', { x: 0.35, y: 1.8, w: SW - 0.7, h: 1.0, fontSize: 44, color: 'FFFFFF', bold: true, align: 'center', fontFace: 'Arial' });
+      endSlide.addText('Strategic Foresight by Brandscapes Worldwide', { x: 0.35, y: 2.9, w: SW - 0.7, h: 0.4, fontSize: 14, color: 'FF6321', align: 'center', fontFace: 'Arial' });
 
       await pres.writeFile({ fileName: `TrendWeaver_${topic.replace(/\s+/g, '_')}_Full_Report.pptx` });
     } catch (err) {
@@ -385,7 +415,18 @@ ${currentInsight.relatedSignals.join(', ')}
                       <TrendingUp className="w-5 h-5 text-brand-accent" />
                       Identified Signals
                     </h3>
-                    {loading && step !== 'describe' && <Loader2 className="w-4 h-4 animate-spin text-brand-blue/40" />}
+                    {loading && step !== 'describe' 
+                      ? <Loader2 className="w-4 h-4 animate-spin text-brand-blue/40" />
+                      : trends.length > 0 && (
+                        <button
+                          onClick={handleDownloadPPTX}
+                          disabled={isGeneratingPPTX}
+                          className="flex items-center gap-2 px-4 py-2 bg-[#EA4335] text-white rounded-xl text-xs font-bold hover:bg-[#c5352a] transition-all shadow-md disabled:opacity-50"
+                        >
+                          {isGeneratingPPTX ? <><Loader2 className="w-3 h-3 animate-spin" />Generating...</> : <><BarChart3 className="w-3 h-3" />Full PPTX</>}
+                        </button>
+                      )
+                    }
                   </div>
 
                   {landscapeSummary && (
@@ -617,23 +658,6 @@ ${currentInsight.relatedSignals.join(', ')}
                       >
                         {copied ? <Check className="w-3 h-3 text-green-500" /> : <Share2 className="w-3 h-3" />}
                         {copied ? 'Copied!' : 'Share Insight'}
-                      </button>
-                      <button 
-                        onClick={handleDownloadPPTX}
-                        disabled={isGeneratingPPTX}
-                        className="flex items-center gap-2 px-6 py-2 bg-[#EA4335] text-white rounded-xl text-xs font-bold hover:bg-[#c5352a] transition-all shadow-md disabled:opacity-50"
-                      >
-                        {isGeneratingPPTX ? (
-                          <>
-                            <Loader2 className="w-3 h-3 animate-spin" />
-                            Generating...
-                          </>
-                        ) : (
-                          <>
-                            <BarChart3 className="w-3 h-3" />
-                            Full PPTX Report
-                          </>
-                        )}
                       </button>
                       <button 
                         onClick={handleDownload}
